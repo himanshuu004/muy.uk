@@ -53,9 +53,8 @@ function Footer() {
           items: [
             <div key="addr" className="flex items-start">
               <span className="text-primary mr-2 mt-0.5">📍</span>
-              <span>
-                State Project Management Unit, Rural Development Department,
-                Uttarakhand, Near IT Park, Dehradun, Uttarakhand
+              <span className="leading-snug">
+                State Project Management Unit, Department of Rural Development, Uttarahaat Near IT Park, Dehradun, Uttarakhand
               </span>
             </div>,
             <div key="phone" className="flex items-center">

@@ -151,7 +151,7 @@ function WhoWeAre() {
               label="Leadership"
               titleLine1="Ms. Jharna"
               titleLine2="Kamthan (IAS)"
-              subtitle="Additional Secretary / Project Coordinator, Rural Business Incubators"
+              subtitle="Additional Secretary / Project Coordinator, Mukhyamantri Udyamshala Yojana"
               quote="Empowering rural entrepreneurs is not just a mission, it's our commitment to building a self-reliant and prosperous Uttarakhand. Through the Mukhyamantri Udyamshala Yojana, we are creating opportunities that transform dreams into reality and villages into hubs of innovation."
               imageSrc={withBase("/Secretary/secretary.webp")}
               imageAlt="Ms. Jharna Kamthan (IAS)"

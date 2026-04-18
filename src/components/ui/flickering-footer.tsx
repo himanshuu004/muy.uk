@@ -288,9 +288,9 @@ export function FlickeringFooter({
 
   return (
     <footer id="footer" className="w-full bg-gray-900 text-gray-300 pb-0">
-      <div className="mx-auto w-full max-w-7xl px-4 py-12">
-        <div className="flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
-          <div className="flex max-w-sm flex-col items-start justify-start gap-y-5">
+      <div className="w-full px-6 py-12 sm:px-10 lg:px-16 2xl:px-24">
+        <div className="flex flex-col gap-12 lg:flex-row lg:items-start lg:justify-between">
+          <div className="flex flex-col items-start justify-start gap-y-5 lg:w-4/12 2xl:w-3/12">
             {brand.to ? (
               <Link to={brand.to} className="flex items-center gap-3">
                 <img
@@ -336,8 +336,8 @@ export function FlickeringFooter({
             ) : null}
           </div>
 
-          <div className="w-full md:w-1/2">
-            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="w-full lg:flex-1">
+            <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-3">
               {columns.map((column, columnIndex) => (
                 <ul key={columnIndex} className="flex flex-col gap-y-2">
                   <li className="mb-2 text-sm font-semibold text-white">

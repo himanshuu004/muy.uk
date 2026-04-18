@@ -25,7 +25,7 @@ function Header() {
     ].join(' ')
 
   return (
-    <header className="sticky top-0 z-50 border-b border-gray-200/70 bg-white/80 shadow-sm backdrop-blur-md supports-[backdrop-filter]:bg-white/70">
+    <header className="sticky top-0 z-50 border-b border-gray-200/70 bg-white shadow-sm">
       <nav className="container mx-auto px-4 py-2 sm:py-3 font-display">
         <div className="flex items-center justify-between">
           {/* Left: Logo and Site Title */}
@@ -59,7 +59,7 @@ function Header() {
             
             {/* ABOUT */}
             <NavLink 
-              to="/About" 
+              to="/about" 
               className={navLinkClassName}
             >
               About

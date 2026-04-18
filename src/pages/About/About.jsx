@@ -334,30 +334,19 @@ export default function About() {
                 className="sans mb-4 leading-relaxed"
                 style={{ color: 'var(--muted)', fontSize: '1.05rem' }}
               >
-                The <strong style={{ color: 'var(--ink)', fontWeight: 600 }}>
+                <strong style={{ color: 'var(--ink)', fontWeight: 600 }}>
                   Mukhyamantri Udyamshala Yojana (MUY)
-                </strong> is a flagship initiative designed to promote entrepreneurship and
-                innovation across the state. This comprehensive program provides aspiring and
-                existing entrepreneurs with the tools, resources, and support needed to transform
-                their innovative ideas into successful business ventures.
-              </p>
-              <p
-                className="sans leading-relaxed"
-                style={{ color: 'var(--muted)', fontSize: '1.05rem' }}
-              >
-                Through strategic partnerships, expert mentorship, and comprehensive incubation
-                services, MUY creates a thriving ecosystem where entrepreneurship becomes a key
-                driver of economic development and social progress.
+                </strong> (earlier known as Rural Business Incubator) is an initiative by the Department of Rural Development (RD), Government of Uttarakhand. The Department has been implementing schemes and programmes to promote livelihoods in the rural areas of the State. As a noble initiative, the department has piloted the establishment of two Rural Business Incubators (RBI) in Hawalbagh, Almora and Kotdwar, Pauri, to help establish enterprises and promote an entrepreneurial ecosystem in the State.
               </p>
             </Reveal>
 
             <Reveal custom={1}>
               <div className="grid grid-cols-2 gap-4">
                 {[
-                  { num: '500+', label: 'Entrepreneurs Supported' },
-                  { num: '50+', label: 'Expert Mentors' },
-                  { num: '₹10Cr+', label: 'Funding Facilitated' },
-                  { num: '13', label: 'Districts Covered' },
+                  { num: '25,000+', label: 'Entrepreneurs Mobilized' },
+                  { num: '7,500+', label: 'Enterprises Supported' },
+                  { num: '13', label: 'Incubation Centres' },
+                  { num: '100+', label: 'Industry Partners' },
                 ].map((stat, i) => (
                   <motion.div
                     key={stat.label}

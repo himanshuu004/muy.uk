@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom'
 import { lazy, Suspense } from 'react'
 import Header from '../components/Header/Header'
 import Footer from '../components/Footer/Footer'
+import ScrollToTop from '../components/ScrollToTop/ScrollToTop'
 
 // Lazy load all pages for code splitting
 const Home = lazy(() => import('../pages/Home/Home'))
@@ -28,6 +29,7 @@ const PageLoader = () => (
 function AppRoutes() {
   return (
     <div className="min-h-screen flex flex-col">
+      <ScrollToTop />
       <Header />
       <main className="flex-grow">
         <Suspense fallback={<PageLoader />}>

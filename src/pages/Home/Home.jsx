@@ -69,7 +69,7 @@ function Home() {
       {/* Two Cards Section with Neon Flow background */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
-          <TubesBackground className="rounded-2xl border border-gray-200 p-8">
+          {/* <TubesBackground className="rounded-2xl border border-gray-200 p-8"> */}
             <motion.div
               initial="hidden"
               whileInView="visible"
@@ -95,7 +95,7 @@ function Home() {
                 </motion.div>
               </div>
             </motion.div>
-          </TubesBackground>
+          {/* </TubesBackground> */}
         </div>
       </section>
 
@@ -167,7 +167,7 @@ function Home() {
               Our Location
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Visit us at our office and incubation center at State Project Management Unit, Rural Development Department, Near IT Park, Dehradun, Uttarakhand
+              Visit us at our office and incubation center at State Project Management Unit, Department of Rural Development, Uttarahaat Near IT Park, Dehradun, Uttarakhand
             </p>
           </div>
           

@@ -204,6 +204,19 @@ export function FAQMonochrome({
       .faq1-fade--ready {
         animation: faq1-fade-up 860ms cubic-bezier(0.22, 0.68, 0, 1) forwards;
       }
+      @media (max-width: 420px) {
+        .faq1-intro {
+          padding: 0.65rem 1rem;
+          gap: 0.65rem;
+          letter-spacing: 0.28em;
+          font-size: 0.58rem;
+          max-width: 20rem;
+        }
+        .faq1-intro__tick {
+          width: 0.45rem;
+          height: 0.45rem;
+        }
+      }
     `
 
     document.head.appendChild(style)
@@ -313,7 +326,7 @@ export function FAQMonochrome({
       />
 
       <section
-        className={`relative z-10 mx-auto flex max-w-4xl flex-col gap-12 px-6 py-24 lg:max-w-5xl lg:px-12 ${
+        className={`relative z-10 mx-auto flex max-w-4xl flex-col gap-8 px-4 py-12 sm:gap-12 sm:px-6 sm:py-16 lg:max-w-5xl lg:px-12 lg:py-24 ${
           hasEntered ? "faq1-fade--ready" : "faq1-fade"
         }`}
       >
@@ -337,18 +350,18 @@ export function FAQMonochrome({
               {eyebrow}
             </p>
             <h1
-              className={`text-4xl font-semibold leading-tight md:text-5xl ${palette.heading}`}
+              className={`text-2xl font-semibold leading-tight sm:text-3xl md:text-5xl ${palette.heading}`}
             >
               {title}
             </h1>
-            <p className={`max-w-xl text-base ${palette.muted}`}>{description}</p>
+            <p className={`max-w-xl text-sm sm:text-base ${palette.muted}`}>{description}</p>
           </div>
 
           {showThemeToggle ? (
             <button
               type="button"
               onClick={toggleTheme}
-              className={`relative inline-flex h-11 items-center gap-3 rounded-full border px-5 text-sm font-medium transition-colors duration-500 ${palette.toggleSurface} ${palette.toggle}`}
+              className={`relative inline-flex h-10 sm:h-11 items-center gap-3 rounded-full border px-4 sm:px-5 text-xs sm:text-sm font-medium transition-colors duration-500 ${palette.toggleSurface} ${palette.toggle}`}
               aria-pressed={theme === "dark" ? "true" : "false"}
             >
               <span className="relative flex h-6 w-6 items-center justify-center">
@@ -379,7 +392,7 @@ export function FAQMonochrome({
             return (
               <li
                 key={`${index}-${item.question}`}
-                className={`group relative overflow-hidden rounded-3xl border backdrop-blur-xl transition-all duration-500 hover:-translate-y-0.5 focus-within:-translate-y-0.5 ${palette.border} ${palette.panel} ${palette.shadow}`}
+                className={`group relative overflow-hidden rounded-2xl border backdrop-blur-xl transition-all duration-500 hover:-translate-y-0.5 focus-within:-translate-y-0.5 sm:rounded-3xl ${palette.border} ${palette.panel} ${palette.shadow}`}
                 onMouseMove={setCardGlow}
                 onMouseLeave={clearCardGlow}
               >
@@ -405,10 +418,10 @@ export function FAQMonochrome({
                         ? "rgba(255,255,255,0.35)"
                         : "rgba(17,17,17,0.25)",
                   }}
-                  className="relative flex w-full items-start gap-6 px-8 py-7 text-left transition-colors duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--faq-outline)]"
+                  className="relative flex w-full items-start gap-3 px-4 py-3 text-left transition-colors duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--faq-outline)] sm:gap-6 sm:px-8 sm:py-7"
                 >
                   <span
-                    className={`relative flex h-12 w-12 shrink-0 items-center justify-center rounded-full border transition-all duration-500 group-hover:scale-105 ${palette.iconRing} ${palette.iconSurface}`}
+                    className={`relative mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border transition-all duration-500 group-hover:scale-105 sm:mt-0 sm:h-12 sm:w-12 ${palette.iconRing} ${palette.iconSurface}`}
                   >
                     <span
                       className={`pointer-events-none absolute inset-0 rounded-full border opacity-30 ${palette.iconRing} ${
@@ -416,7 +429,7 @@ export function FAQMonochrome({
                       }`}
                     />
                     <svg
-                      className={`relative h-5 w-5 transition-transform duration-500 ${palette.icon} ${
+                      className={`relative h-3.5 w-3.5 sm:h-5 sm:w-5 transition-transform duration-500 ${palette.icon} ${
                         open ? "rotate-45" : ""
                       }`}
                       viewBox="0 0 24 24"
@@ -439,10 +452,10 @@ export function FAQMonochrome({
                     </svg>
                   </span>
 
-                  <div className="flex flex-1 flex-col gap-4">
-                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+                  <div className="flex flex-1 flex-col gap-3 sm:gap-4">
+                    <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
                       <h2
-                        className={`text-lg font-medium leading-tight sm:text-xl ${palette.heading}`}
+                        className={`text-base font-medium leading-tight sm:text-xl ${palette.heading}`}
                       >
                         {item.question}
                       </h2>
@@ -459,11 +472,11 @@ export function FAQMonochrome({
                       id={panelId}
                       role="region"
                       aria-labelledby={buttonId}
-                      className={`overflow-hidden text-sm leading-relaxed transition-[max-height] duration-500 ease-out ${
-                        open ? "max-h-64" : "max-h-0"
+                      className={`overflow-hidden text-xs sm:text-sm leading-snug sm:leading-relaxed transition-[max-height] duration-500 ease-out ${
+                        open ? "max-h-48 sm:max-h-64" : "max-h-0"
                       } ${palette.muted}`}
                     >
-                      <p className="pr-2">{item.answer}</p>
+                      <p className="pr-1 sm:pr-2">{item.answer}</p>
                     </div>
                   </div>
                 </button>

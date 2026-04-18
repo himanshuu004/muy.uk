@@ -45,76 +45,17 @@ function AnimatedStats() {
 
   return (
     <div className="w-full">
-      {/* Glassmorphism stats bar */}
-      <div
-        style={{
-          background: 'rgba(255,255,255,0.08)',
-          backdropFilter: 'blur(20px)',
-          WebkitBackdropFilter: 'blur(20px)',
-          border: '1px solid rgba(255,255,255,0.18)',
-          borderRadius: '20px',
-          padding: '28px 36px',
-          boxShadow: '0 8px 40px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.15)',
-        }}
-      >
-        <p
-          style={{
-            textAlign: 'center',
-            fontSize: '11px',
-            fontWeight: 600,
-            letterSpacing: '3px',
-            textTransform: 'uppercase',
-            color: 'rgba(255,255,255,0.55)',
-            marginBottom: '20px',
-            fontFamily: "'DM Sans', sans-serif",
-          }}
-        >
+      <div className="impact-card">
+        <p className="impact-title">
           MUY Impact at a Glance
         </p>
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
-            gap: '0',
-          }}
-        >
+        <div className="impact-grid">
           {stats.map((stat, i) => (
-            <div
-              key={i}
-              style={{
-                textAlign: 'center',
-                padding: '0 16px',
-                borderRight: i < 3 ? '1px solid rgba(255,255,255,0.15)' : 'none',
-              }}
-            >
-              <div
-                style={{
-                  fontSize: 'clamp(28px, 4vw, 48px)',
-                  fontWeight: 800,
-                  color: '#fff',
-                  lineHeight: 1,
-                  fontFamily: "'Sora', sans-serif",
-                  letterSpacing: '-1px',
-                  marginBottom: '6px',
-                  // Subtle golden accent for the numbers
-                  background: 'linear-gradient(135deg, #fff 60%, #ffd580)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                }}
-              >
+            <div key={i} className="impact-item">
+              <div className="impact-value">
                 {stat.value.toLocaleString()}{stat.suffix}
               </div>
-              <div
-                style={{
-                  fontSize: '11px',
-                  color: 'rgba(255,255,255,0.65)',
-                  fontWeight: 500,
-                  letterSpacing: '0.5px',
-                  fontFamily: "'DM Sans', sans-serif",
-                  lineHeight: 1.4,
-                }}
-              >
+              <div className="impact-label">
                 {stat.label}
               </div>
             </div>
@@ -129,10 +70,10 @@ function Hero() {
   const withBase = (path) => `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`
 
   const carousel = [
-    
-    // { id: 5, image: withBase('/Carousel/5.webp') },
-    { id: 6, image: withBase('/Carousel/6.png') },
-    { id: 7, image: withBase('/Carousel/7.JPG') },{ id: 3, image: withBase('/Carousel/3.webp') },
+    { id: 1, image: withBase('/Carousel/1.webp') },
+    { id: 2, image: withBase('/Carousel/2.webp') },
+    { id: 3, image: withBase('/Carousel/3.webp') },
+    // { id: 4, image: withBase('/Carousel/4.webp') },
   ]
 
   const extendedCarousel = [carousel[carousel.length - 1], ...carousel, carousel[0]]
@@ -140,7 +81,6 @@ function Hero() {
   const [isTransitioning, setIsTransitioning] = useState(true)
   const carouselContainerRef = useRef(null)
   const [imageErrors, setImageErrors] = useState({})
-  const [isVisible, setIsVisible] = useState(false)
 
   const getRealIndex = (index) => {
     if (index === 0) return carousel.length - 1
@@ -155,12 +95,7 @@ function Hero() {
   const goToCarousel = (realIndex) => setCurrentIndex(realIndex + 1)
 
   useEffect(() => {
-    const t = setTimeout(() => setIsVisible(true), 100)
-    return () => clearTimeout(t)
-  }, [])
-
-  useEffect(() => {
-    const interval = setInterval(() => goToNext(), 4000)
+    const interval = setInterval(() => goToNext(), 5000)
     return () => clearInterval(interval)
   }, [currentIndex])
 
@@ -187,39 +122,25 @@ function Hero() {
 
   return (
     <>
-      {/* Google Fonts */}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap');
 
         @keyframes fadeSlideUp {
-          from { opacity: 0; transform: translateY(32px); }
+          from { opacity: 0; transform: translateY(24px); }
           to   { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to   { opacity: 1; }
         }
         @keyframes pulseGlow {
           0%, 100% { box-shadow: 0 0 0 0 rgba(220,38,38,0); }
           50%       { box-shadow: 0 0 24px 4px rgba(220,38,38,0.35); }
         }
-        .hero-tag {
-          animation: fadeSlideUp 0.8s cubic-bezier(.16,1,.3,1) 0.2s both;
-        }
-        .hero-title {
-          animation: fadeSlideUp 0.9s cubic-bezier(.16,1,.3,1) 0.4s both;
-        }
-        .hero-sub {
-          animation: fadeSlideUp 0.9s cubic-bezier(.16,1,.3,1) 0.6s both;
-        }
-        .hero-cta {
-          animation: fadeSlideUp 0.9s cubic-bezier(.16,1,.3,1) 0.75s both;
-        }
-        .hero-stats {
-          animation: fadeSlideUp 1s cubic-bezier(.16,1,.3,1) 0.9s both;
-        }
+        .hero-tag   { animation: fadeSlideUp 0.8s cubic-bezier(.16,1,.3,1) 0.2s both; }
+        .hero-title { animation: fadeSlideUp 0.9s cubic-bezier(.16,1,.3,1) 0.35s both; }
+        .hero-sub   { animation: fadeSlideUp 0.9s cubic-bezier(.16,1,.3,1) 0.5s both; }
+        .hero-cta   { animation: fadeSlideUp 0.9s cubic-bezier(.16,1,.3,1) 0.62s both; }
+        .hero-stats { animation: fadeSlideUp 1s cubic-bezier(.16,1,.3,1) 0.75s both; }
         .cta-btn {
           animation: pulseGlow 3s ease-in-out 2s infinite;
+          transition: all 0.3s cubic-bezier(.16,1,.3,1);
         }
         .cta-btn:hover {
           animation: none;
@@ -228,21 +149,107 @@ function Hero() {
         }
         .arrow-btn:hover {
           background: rgba(255,255,255,0.95) !important;
+          color: #111 !important;
           transform: translateY(-50%) scale(1.08);
         }
-        .dot-btn {
-          transition: all 0.3s ease;
+        .dot-btn { transition: all 0.3s ease; }
+        .dot-btn:hover { transform: scaleX(1.5); }
+
+        .impact-card {
+          background: rgba(255,255,255,0.08);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border: 1px solid rgba(255,255,255,0.18);
+          border-radius: 20px;
+          padding: 28px 36px;
+          box-shadow: 0 8px 40px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.15);
         }
-        .dot-btn:hover {
-          transform: scaleX(1.5);
+        .impact-title {
+          text-align: center;
+          font-size: 11px;
+          font-weight: 600;
+          letter-spacing: 3px;
+          text-transform: uppercase;
+          color: rgba(255,255,255,0.55);
+          margin: 0 0 20px 0;
+          font-family: 'DM Sans', sans-serif;
+        }
+        .impact-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 0;
+        }
+        .impact-item {
+          text-align: center;
+          padding: 0 16px;
+          border-right: 1px solid rgba(255,255,255,0.15);
+        }
+        .impact-item:last-child {
+          border-right: none;
+        }
+        .impact-value {
+          font-size: clamp(28px, 4vw, 48px);
+          font-weight: 800;
+          line-height: 1;
+          font-family: 'Sora', sans-serif;
+          letter-spacing: -1px;
+          margin-bottom: 6px;
+          background: linear-gradient(135deg, #fff 60%, #ffd580);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+        .impact-label {
+          font-size: 11px;
+          color: rgba(255,255,255,0.65);
+          font-weight: 500;
+          letter-spacing: 0.5px;
+          font-family: 'DM Sans', sans-serif;
+          line-height: 1.4;
+        }
+
+        /* Small screens: compact 2x2 grid */
+        @media (max-width: 640px) {
+          .impact-card {
+            border-radius: 16px;
+            padding: 14px 14px;
+          }
+          .impact-title {
+            font-size: 10px;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+          }
+          .impact-grid {
+            grid-template-columns: repeat(2, 1fr);
+          }
+          .impact-item {
+            padding: 10px 8px;
+            border-right: none;
+            border-top: 1px solid rgba(255,255,255,0.12);
+          }
+          .impact-item:nth-child(1),
+          .impact-item:nth-child(2) {
+            border-top: none;
+          }
+          .impact-item:nth-child(odd) {
+            border-right: 1px solid rgba(255,255,255,0.12);
+          }
+          .impact-value {
+            font-size: clamp(20px, 7vw, 28px);
+            margin-bottom: 4px;
+          }
+          .impact-label {
+            font-size: 10px;
+            letter-spacing: 0.3px;
+            line-height: 1.25;
+          }
         }
       `}</style>
 
       <section style={{ position: 'relative', width: '100%' }}>
-        {/* ── Carousel ── */}
         <div style={{ position: 'relative', width: '100%', height: '100vh', overflow: 'hidden' }}>
-          
-          {/* Scrolling images */}
+
+          {/* Carousel images */}
           <div
             ref={carouselContainerRef}
             style={{
@@ -277,62 +284,67 @@ function Hero() {
                       <p style={{ color: 'rgba(255,255,255,0.4)', fontFamily: "'DM Sans', sans-serif" }}>Image {item.id}</p>
                     </div>
                   )}
-
-                  {/* Multi-layer gradient overlay for better text legibility */}
                   <div style={{
                     position: 'absolute', inset: 0,
-                    background: `
-                      linear-gradient(to bottom,
-                        rgba(0,0,0,0.55) 0%,
-                        rgba(0,0,0,0.15) 40%,
-                        rgba(0,0,0,0.15) 55%,
-                        rgba(0,0,0,0.75) 100%
-                      )
-                    `,
+                    background: `linear-gradient(to bottom,
+                      rgba(0,0,0,0.45) 0%,
+                      rgba(0,0,0,0.1) 35%,
+                      rgba(0,0,0,0.1) 50%,
+                      rgba(0,0,0,0.82) 100%
+                    )`,
                   }} />
                 </div>
               )
             })}
           </div>
 
-          {/* ── Overlay Content ── */}
+          {/* Overlay content */}
           <div style={{
             position: 'absolute', inset: 0, zIndex: 10,
-            display: 'flex', flexDirection: 'column',
-            justifyContent: 'space-between',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'flex-end',
             padding: '0',
           }}>
-            {/* CENTER: Hero text */}
-            <div style={{
-              flex: 1,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '80px 24px 0',
-            }}>
-              <div style={{ textAlign: 'center', maxWidth: '860px', width: '100%' }}>
+            {/* Hero text + stats stacked at bottom */}
+            <div
+              className="hero-stats"
+              style={{
+                padding: '0 clamp(16px, 5vw, 80px)',
+                paddingBottom: 'clamp(36px, 6vh, 64px)',
+                width: '100%',
+                maxWidth: '1000px',
+                margin: '0 auto',
+                boxSizing: 'border-box',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '20px',
+              }}
+            >
+              {/* ── Text block above stats ── */}
+              <div style={{ textAlign: 'center' }}>
 
-                {/* Eyebrow tag */}
+                {/* Eyebrow badge */}
                 <div className="hero-tag" style={{
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '8px',
+                  gap: '7px',
                   background: 'rgba(255,255,255,0.12)',
                   backdropFilter: 'blur(12px)',
                   WebkitBackdropFilter: 'blur(12px)',
                   border: '1px solid rgba(255,255,255,0.2)',
                   borderRadius: '999px',
-                  padding: '6px 18px',
-                  marginBottom: '20px',
+                  padding: '5px 15px',
+                  marginBottom: '12px',
                 }}>
                   <span style={{
-                    width: '7px', height: '7px', borderRadius: '50%',
+                    width: '6px', height: '6px', borderRadius: '50%',
                     background: '#22c55e',
                     boxShadow: '0 0 8px #22c55e',
                     flexShrink: 0,
                   }} />
                   <span style={{
-                    fontSize: '11px', fontWeight: 600,
+                    fontSize: '10px', fontWeight: 600,
                     letterSpacing: '2px', textTransform: 'uppercase',
                     color: 'rgba(255,255,255,0.85)',
                     fontFamily: "'DM Sans', sans-serif",
@@ -341,18 +353,18 @@ function Hero() {
                   </span>
                 </div>
 
-                {/* Main title */}
+                {/* Title */}
                 <h1 className="hero-title" style={{
                   fontFamily: "'Sora', sans-serif",
-                  fontSize: 'clamp(28px, 5.5vw, 68px)',
+                  fontSize: 'clamp(22px, 4vw, 50px)',
                   fontWeight: 800,
                   color: '#ffffff',
-                  lineHeight: 1.1,
-                  letterSpacing: '-1px',
-                  marginBottom: '16px',
+                  lineHeight: 1.12,
+                  letterSpacing: '-0.5px',
+                  marginBottom: '10px',
                   textShadow: '0 4px 24px rgba(0,0,0,0.4)',
                 }}>
-                  Mukhyamantri<br />
+                  Mukhyamantri{' '}
                   <span style={{
                     background: 'linear-gradient(90deg, #fbbf24, #f97316)',
                     WebkitBackgroundClip: 'text',
@@ -363,30 +375,30 @@ function Hero() {
                   </span>
                 </h1>
 
-                {/* Divider line */}
+                {/* Subtitle */}
                 <div className="hero-sub" style={{
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  gap: '12px',
-                  marginBottom: '14px',
+                  gap: '10px',
+                  marginBottom: '16px',
                 }}>
-                  <div style={{ height: '1px', width: '48px', background: 'rgba(255,255,255,0.3)' }} />
+                  <div style={{ height: '1px', width: '36px', background: 'rgba(255,255,255,0.3)' }} />
                   <p style={{
                     fontFamily: "'DM Sans', sans-serif",
-                    fontSize: 'clamp(13px, 1.8vw, 18px)',
+                    fontSize: 'clamp(12px, 1.4vw, 15px)',
                     fontWeight: 400,
-                    color: 'rgba(255,255,255,0.80)',
+                    color: 'rgba(255,255,255,0.78)',
                     letterSpacing: '0.3px',
                     margin: 0,
                   }}>
                     Empowering Entrepreneurs, Building Tomorrow
                   </p>
-                  <div style={{ height: '1px', width: '48px', background: 'rgba(255,255,255,0.3)' }} />
+                  <div style={{ height: '1px', width: '36px', background: 'rgba(255,255,255,0.3)' }} />
                 </div>
 
-                {/* CTA Button */}
-                <div className="hero-cta" style={{ marginTop: '28px' }}>
+                {/* CTA */}
+                <div className="hero-cta">
                   <a
                     href="https://ukrbi.in/new/"
                     target="_blank"
@@ -395,45 +407,35 @@ function Hero() {
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',
-                      gap: '10px',
-                      padding: '16px 40px',
+                      gap: '9px',
+                      padding: '12px 32px',
                       background: 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)',
                       color: '#fff',
                       fontFamily: "'Sora', sans-serif",
                       fontWeight: 700,
-                      fontSize: 'clamp(13px, 1.5vw, 16px)',
+                      fontSize: 'clamp(11px, 1.2vw, 14px)',
                       letterSpacing: '1.5px',
                       textTransform: 'uppercase',
                       textDecoration: 'none',
-                      borderRadius: '12px',
+                      borderRadius: '10px',
                       boxShadow: '0 8px 24px rgba(220,38,38,0.4)',
-                      transition: 'all 0.3s cubic-bezier(.16,1,.3,1)',
                       border: '1px solid rgba(255,255,255,0.15)',
                     }}
                   >
                     Apply Now
-                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ flexShrink: 0 }}>
+                    <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ flexShrink: 0 }}>
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                     </svg>
                   </a>
                 </div>
               </div>
-            </div>
 
-            {/* BOTTOM: Stats panel */}
-            <div className="hero-stats" style={{
-              padding: '0 clamp(16px, 5vw, 80px)',
-              paddingBottom: 'clamp(64px, 10vh, 100px)',
-              width: '100%',
-              maxWidth: '1000px',
-              margin: '0 auto',
-              boxSizing: 'border-box',
-            }}>
+              {/* Stats bar */}
               <AnimatedStats />
             </div>
           </div>
 
-          {/* ── Nav Arrows ── */}
+          {/* Nav Arrows */}
           {[
             { side: 'left', icon: 'M15 19l-7-7 7-7', action: goToPrev, label: 'Previous' },
             { side: 'right', icon: 'M9 5l7 7-7 7', action: goToNext, label: 'Next' },
@@ -470,10 +472,10 @@ function Hero() {
             </button>
           ))}
 
-          {/* ── Dot Indicators ── */}
+          {/* Dot Indicators */}
           <div style={{
             position: 'absolute',
-            bottom: '28px',
+            bottom: '20px',
             left: '50%',
             transform: 'translateX(-50%)',
             zIndex: 20,
