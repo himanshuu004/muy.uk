@@ -13,6 +13,10 @@ const Apply = lazy(() => import('../pages/Apply/Apply'))
 const Gallery = lazy(() => import('../pages/Gallery/Gallery'))
 const Events = lazy(() => import('../pages/Events/Events'))
 const Contact = lazy(() => import('../pages/Contact/Contact'))
+const MentorshipHome = lazy(() => import('../pages/Mentorship/MentorshipHome'))
+const MentorsList = lazy(() => import('../pages/Mentorship/MentorsList'))
+const MentorRegister = lazy(() => import('../pages/Mentorship/MentorRegister'))
+const MentorRequest = lazy(() => import('../pages/Mentorship/MentorRequest'))
 // const Location = lazy(() => import('../pages/Location/Location'))
 
 // Loading component
@@ -42,6 +46,10 @@ function AppRoutes() {
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/events" element={<Events />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/mentorship" element={<MentorshipHome />} />
+            <Route path="/mentorship/mentors" element={<MentorsList />} />
+            <Route path="/mentorship/register" element={<MentorRegister />} />
+            <Route path="/mentorship/request/:mentorId" element={<MentorRequest />} />
             {/* <Route path="/location" element={<Location />} /> */}
           </Routes>
         </Suspense>

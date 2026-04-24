@@ -6,6 +6,7 @@ function Header() {
   const [language, setLanguage] = useState('English')
   const [isLangOpen, setIsLangOpen] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isMentorshipOpen, setIsMentorshipOpen] = useState(false)
 
   const navLinkClassName = ({ isActive }) =>
     [
@@ -96,6 +97,40 @@ function Header() {
             >
               Contact
             </NavLink>
+
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setIsMentorshipOpen((prev) => !prev)}
+                onBlur={() => {
+                  setTimeout(() => setIsMentorshipOpen(false), 120)
+                }}
+                className="relative inline-flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium tracking-wide text-gray-700 transition-all duration-200 hover:text-primary hover:drop-shadow-[0_0_8px_rgba(26,107,58,0.45)] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+                aria-haspopup="true"
+                aria-expanded={isMentorshipOpen}
+              >
+                Mentorship
+                <span className={`text-xs transition-transform ${isMentorshipOpen ? 'rotate-180' : ''}`}>▼</span>
+              </button>
+              {isMentorshipOpen && (
+                <div className="absolute right-0 top-full z-50 mt-2 w-56 rounded-lg border border-gray-200 bg-white p-2 shadow-lg">
+                  <NavLink
+                    to="/mentorship/mentors"
+                    className="block rounded-md px-3 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-50 hover:text-primary hover:drop-shadow-[0_0_8px_rgba(26,107,58,0.45)]"
+                    onClick={() => setIsMentorshipOpen(false)}
+                  >
+                    Mentors
+                  </NavLink>
+                  <NavLink
+                    to="/mentorship/register"
+                    className="mt-1 block rounded-md px-3 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-50 hover:text-primary hover:drop-shadow-[0_0_8px_rgba(26,107,58,0.45)]"
+                    onClick={() => setIsMentorshipOpen(false)}
+                  >
+                    Register for Mentors
+                  </NavLink>
+                </div>
+              )}
+            </div>
 
             {/* LOCATION */}
             {/* <NavLink 
@@ -191,6 +226,12 @@ function Header() {
               </NavLink>
               <NavLink to="/contact" className={mobileNavLinkClassName} onClick={() => setIsMenuOpen(false)}>
                 Contact
+              </NavLink>
+              <NavLink to="/mentorship/mentors" className={mobileNavLinkClassName} onClick={() => setIsMenuOpen(false)}>
+                Mentors
+              </NavLink>
+              <NavLink to="/mentorship/register" className={mobileNavLinkClassName} onClick={() => setIsMenuOpen(false)}>
+                Register for Mentors
               </NavLink>
             </div>
           </div>

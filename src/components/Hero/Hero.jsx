@@ -70,10 +70,11 @@ function Hero() {
   const withBase = (path) => `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`
 
   const carousel = [
-    { id: 1, image: withBase('/Carousel/1.webp') },
-    { id: 2, image: withBase('/Carousel/2.webp') },
+    { id: 1, image: withBase('/Carousel/final 1.webp') },
+    { id: 2, image: withBase('/Carousel/22.webp') },
     { id: 3, image: withBase('/Carousel/3.webp') },
-    // { id: 4, image: withBase('/Carousel/4.webp') },
+    { id: 4, image: withBase('/Carousel/1.webp') },
+    { id: 5, image: withBase('/Carousel/2.webp') },
   ]
 
   const extendedCarousel = [carousel[carousel.length - 1], ...carousel, carousel[0]]

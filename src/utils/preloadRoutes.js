@@ -8,4 +8,8 @@ export function preloadRoutes() {
   import('../pages/Gallery/Gallery')
   import('../pages/Events/Events')
   import('../pages/Contact/Contact')
+  import('../pages/Mentorship/MentorshipHome')
+  import('../pages/Mentorship/MentorsList')
+  import('../pages/Mentorship/MentorRegister')
+  import('../pages/Mentorship/MentorRequest')
 }

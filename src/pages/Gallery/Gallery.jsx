@@ -1,25 +1,35 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { GALLERY_SECTIONS } from '../../data/gallerySections'
+
+function publicAssetUrl(relativePath) {
+  const base = import.meta.env.BASE_URL || '/'
+  const normalized = relativePath.replace(/^\//, '')
+  const encoded = normalized.split('/').map(encodeURIComponent).join('/')
+  return `${base}${encoded}`
+}
 
 function Gallery() {
-  const successStoriesRef = useRef(null)
+  const sectionRefs = useRef({})
   const videosRef = useRef(null)
-  const [selectedImage, setSelectedImage] = useState(null)
-  const [selectedIndex, setSelectedIndex] = useState(null)
+  const [lightbox, setLightbox] = useState(null)
   const [visibleItems, setVisibleItems] = useState(new Set())
 
-  const withBase = (path) => `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`
+  const sections = useMemo(
+    () =>
+      GALLERY_SECTIONS.map((sec) => ({
+        ...sec,
+        items: sec.images.map((rel, i) => ({
+          src: publicAssetUrl(rel),
+          alt: `${sec.title} — photo ${i + 1}`,
+          dataId: `${sec.id}-img-${i}`,
+        })),
+      })),
+    []
+  )
 
-  const successStoriesImages = [
-    { id: 1, src: withBase('/Success Stories/A1.webp'), title: 'Success Story 1' },
-    { id: 2, src: withBase('/Success Stories/A2.webp'), title: 'Success Story 2' },
-    { id: 3, src: withBase('/Success Stories/A3.webp'), title: 'Success Story 3' },
-    { id: 4, src: withBase('/Success Stories/A4.webp'), title: 'Success Story 4' },
-    { id: 5, src: withBase('/Success Stories/A5.webp'), title: 'Success Story 5' },
-    { id: 6, src: withBase('/Success Stories/A6.webp'), title: 'Success Story 6' },
-    { id: 7, src: withBase('/Success Stories/A7.webp'), title: 'Success Story 7' },
-    { id: 8, src: withBase('/Success Stories/A8.webp'), title: 'Success Story 8' },
-    { id: 9, src: withBase('/Success Stories/A9.webp'), title: 'Success Story 9' },
-  ]
+  const lightboxSection = lightbox ? sections.find((s) => s.id === lightbox.sectionId) : null
+  const lightboxItems = lightboxSection?.items ?? []
+  const selectedImage = lightbox && lightboxItems[lightbox.index]?.src
 
   const youtubeVideos = [
     { id: 1, embedId: 'rticvbE1nKM', title: 'MUY Success Stories - Video 1' },
@@ -45,33 +55,50 @@ function Gallery() {
   // Hash navigation
   useEffect(() => {
     const hash = window.location.hash
-    if (hash) {
-      setTimeout(() => {
-        const map = { '#success-stories': successStoriesRef, '#videos': videosRef }
-        map[hash]?.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      }, 100)
-    }
+    if (!hash) return
+    setTimeout(() => {
+      if (hash === '#videos') {
+        videosRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        return
+      }
+      const id = hash.replace(/^#/, '')
+      sectionRefs.current[id]?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 100)
   }, [])
 
-  const openModal = (img, idx) => { setSelectedImage(img); setSelectedIndex(idx) }
-  const closeModal = () => { setSelectedImage(null); setSelectedIndex(null) }
-  const navigate = (dir) => {
-    const next = (selectedIndex + dir + successStoriesImages.length) % successStoriesImages.length
-    setSelectedImage(successStoriesImages[next].src)
-    setSelectedIndex(next)
+  const openModal = (sectionId, index) => setLightbox({ sectionId, index })
+  const closeModal = () => setLightbox(null)
+  const navigateLightbox = (dir) => {
+    setLightbox((prev) => {
+      if (!prev) return null
+      const sec = sections.find((s) => s.id === prev.sectionId)
+      const len = sec?.items?.length ?? 0
+      if (!len) return prev
+      return { ...prev, index: (prev.index + dir + len) % len }
+    })
   }
 
-  // keyboard nav
+  // keyboard nav (within current section)
   useEffect(() => {
+    if (!lightbox) return
     const handler = (e) => {
-      if (!selectedImage) return
-      if (e.key === 'ArrowRight') navigate(1)
-      if (e.key === 'ArrowLeft') navigate(-1)
-      if (e.key === 'Escape') closeModal()
+      if (e.key === 'Escape') {
+        setLightbox(null)
+        return
+      }
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return
+      setLightbox((prev) => {
+        if (!prev) return null
+        const sec = sections.find((s) => s.id === prev.sectionId)
+        const len = sec?.items?.length ?? 0
+        if (!len) return prev
+        const delta = e.key === 'ArrowRight' ? 1 : -1
+        return { ...prev, index: (prev.index + delta + len) % len }
+      })
     }
     window.addEventListener('keydown', handler)
     return () => window.removeEventListener('keydown', handler)
-  }, [selectedImage, selectedIndex])
+  }, [lightbox, sections])
 
   return (
     <>
@@ -235,6 +262,32 @@ function Gallery() {
           white-space: nowrap;
           padding-bottom: 6px;
         }
+        .sec-desc {
+          font-size: 15px;
+          line-height: 1.65;
+          color: #6b7280;
+          max-width: 640px;
+          margin: 0 0 8px;
+        }
+        .gal-section-block {
+          margin-bottom: 72px;
+        }
+        .gal-section-block:last-of-type {
+          margin-bottom: 0;
+        }
+        .gal-pill-row {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          flex-wrap: wrap;
+          max-width: 720px;
+          margin: 0 auto;
+        }
+        .gal-pill-row .gal-pill {
+          font-size: 12px;
+          padding: 7px 14px;
+        }
         .sec-divider {
           height: 1px;
           background: linear-gradient(to right, #d1fae5, #e5e7eb, transparent);
@@ -246,7 +299,6 @@ function Gallery() {
           display: grid;
           grid-template-columns: repeat(3, minmax(0, 1fr));
           gap: 16px;
-          margin-bottom: 72px;
         }
         .story-card {
           position: relative;
@@ -495,17 +547,23 @@ function Gallery() {
               Our <em>Gallery</em>
             </h1>
             <p className="gal-hero-sub">
-              Explore photos and videos capturing the journeys of rural entrepreneurs we've empowered.
+              Explore photos and videos capturing the journeys of rural entrepreneurs we have empowered.
+              {' '}
+              <span style={{ color: 'rgba(255,255,255,0.45)', fontSize: '14px' }}>
+                {sections.reduce((n, s) => n + s.items.length, 0)} photos across {sections.length} albums.
+              </span>
             </p>
-            <div className="gal-hero-pills">
-              <a href="#success-stories" className="gal-pill">
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-                Photos
-              </a>
+            <div className="gal-hero-pills gal-pill-row">
+              {sections.map((sec) => (
+                <a key={sec.id} href={`#${sec.id}`} className="gal-pill" title={sec.title}>
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  {sec.title}
+                </a>
+              ))}
               <a href="#videos" className="gal-pill">
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
@@ -520,44 +578,53 @@ function Gallery() {
         </header>
 
         <div className="gal-body">
-          {/* ── Success Stories ── */}
-          <section id="success-stories" ref={successStoriesRef} className="scroll-mt-20">
-            <div className="sec-header">
-              <div className="sec-header-left">
-                <p className="sec-eyebrow">Photo Gallery</p>
-                <h2 className="sec-title">Success Stories</h2>
+          {sections.map((sec) => (
+            <section
+              key={sec.id}
+              id={sec.id}
+              ref={(el) => {
+                sectionRefs.current[sec.id] = el
+              }}
+              className="gal-section-block scroll-mt-20"
+            >
+              <div className="sec-header">
+                <div className="sec-header-left">
+                  <p className="sec-eyebrow">{sec.eyebrow}</p>
+                  <h2 className="sec-title">{sec.title}</h2>
+                  {sec.description ? <p className="sec-desc">{sec.description}</p> : null}
+                </div>
+                <span className="sec-count">{sec.items.length} {sec.items.length === 1 ? 'photo' : 'photos'}</span>
               </div>
-              <span className="sec-count">{successStoriesImages.length} photos</span>
-            </div>
-            <div className="sec-divider" />
+              <div className="sec-divider" />
 
-            <div className="stories-grid">
-              {successStoriesImages.map((img, idx) => (
-                <div
-                  key={img.id}
-                  className={`story-card ${visibleItems.has(`img-${idx}`) ? 'visible' : ''}`}
-                  data-id={`img-${idx}`}
-                  style={{ transitionDelay: `${(idx % 3) * 80}ms` }}
-                  onClick={() => openModal(img.src, idx)}
-                >
-                  <img src={img.src} alt={img.title} className="story-img" loading="lazy" />
-                  <div className="story-overlay" />
-                  <span className="story-num">#{String(idx + 1).padStart(2, '0')}</span>
-                  <div className="story-footer">
-                    <span className="story-label">{img.title}</span>
-                    <div className="story-expand">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
-                      </svg>
+              <div className="stories-grid">
+                {sec.items.map((item, idx) => (
+                  <div
+                    key={item.dataId}
+                    className={`story-card ${visibleItems.has(item.dataId) ? 'visible' : ''}`}
+                    data-id={item.dataId}
+                    style={{ transitionDelay: `${(idx % 3) * 80}ms` }}
+                    onClick={() => openModal(sec.id, idx)}
+                  >
+                    <img src={item.src} alt={item.alt} className="story-img" loading="lazy" />
+                    <div className="story-overlay" />
+                    <span className="story-num">#{String(idx + 1).padStart(2, '0')}</span>
+                    <div className="story-footer">
+                      <span className="story-label">{sec.title}</span>
+                      <div className="story-expand">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                        </svg>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          </section>
+                ))}
+              </div>
+            </section>
+          ))}
 
           {/* ── Videos ── */}
-          <section id="videos" ref={videosRef} className="scroll-mt-20">
+          <section id="videos" ref={videosRef} className="gal-section-block scroll-mt-20">
             <div className="sec-header">
               <div className="sec-header-left">
                 <p className="sec-eyebrow">Watch & Inspire</p>
@@ -603,28 +670,48 @@ function Gallery() {
         </div>
 
         {/* ── Lightbox Modal ── */}
-        {selectedImage && (
+        {selectedImage && lightbox && (
           <div className="modal-bg" onClick={closeModal}>
             <div className="modal-box" onClick={(e) => e.stopPropagation()}>
-              <button className="modal-close-btn" onClick={closeModal} aria-label="Close">
+              <button type="button" className="modal-close-btn" onClick={closeModal} aria-label="Close">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
-              <img key={selectedImage} src={selectedImage} alt="Enlarged" className="modal-img" />
-              <div className="modal-bar">
-                <button className="modal-nav" onClick={() => navigate(-1)} aria-label="Previous">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                  </svg>
-                </button>
-                <span className="modal-counter">{selectedIndex + 1} / {successStoriesImages.length}</span>
-                <button className="modal-nav" onClick={() => navigate(1)} aria-label="Next">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </button>
-              </div>
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: '13px',
+                  color: 'rgba(255,255,255,0.55)',
+                  textAlign: 'center',
+                  maxWidth: '100%',
+                }}
+              >
+                {lightboxSection?.title}
+              </p>
+              <img
+                key={selectedImage}
+                src={selectedImage}
+                alt={lightboxItems[lightbox.index]?.alt ?? 'Gallery'}
+                className="modal-img"
+              />
+              {lightboxItems.length > 1 ? (
+                <div className="modal-bar">
+                  <button type="button" className="modal-nav" onClick={() => navigateLightbox(-1)} aria-label="Previous">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
+                  </button>
+                  <span className="modal-counter">
+                    {lightbox.index + 1} / {lightboxItems.length}
+                  </span>
+                  <button type="button" className="modal-nav" onClick={() => navigateLightbox(1)} aria-label="Next">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                </div>
+              ) : null}
             </div>
           </div>
         )}
